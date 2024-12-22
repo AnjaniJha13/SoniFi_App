@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cashback and Rewards</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        .circle-button {
+            transition: all 0.3s ease;
+        }
+        .circle-button:hover {
+            transform: scale(1.05);
+        }
+        .font-size-small {
+            font-size: 0.9rem;
+        }
+        .font-size-medium {
+            font-size: 1.1rem;
+        }
+        .font-size-large {
+            font-size: 1.3rem;
+        }
+    </style>
+</head>
+<body class="bg-white min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Font Size Controls -->
+        <div class="mb-8">
+            <label for="fontSize" class="text-blue-600 mr-2">Font Size:</label>
+            <select id="fontSize" class="border border-blue-600 rounded p-2 text-blue-600">
+                <option value="small">Normal</option>
+                <option value="medium">Medium</option>
+                <option value="large">Large</option>
+            </select>
+        </div>
+
+        <!-- Header -->
+        <h1 class="text-3xl font-bold text-blue-600 text-center mb-12 border-b-2 border-blue-600 pb-4">
+            Cashback and Rewards
+        </h1>
+
+        <!-- Main Content -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Rewards Circle -->
+            <div class="circle-button flex items-center justify-center h-48 w-48 rounded-full border-2 border-blue-600 mx-auto cursor-pointer"
+                 data-speech="Rewards">
+                <span class="text-blue-600 text-xl font-semibold">Rewards</span>
+            </div>
+
+            <!-- Others Circle -->
+            <div class="circle-button flex items-center justify-center h-48 w-48 rounded-full border-2 border-blue-600 mx-auto cursor-pointer"
+                 data-speech="Others">
+                <span class="text-blue-600 text-xl font-semibold">Others</span>
+            </div>
+
+            <!-- Gift Cards Circle -->
+            <div class="circle-button flex items-center justify-center h-48 w-48 rounded-full border-2 border-blue-600 mx-auto cursor-pointer"
+                 data-speech="Gift Cards">
+                <span class="text-blue-600 text-xl font-semibold">Gift Cards</span>
+            </div>
+        </div>
+
+        <!-- Headphone Warning Modal -->
+        <div id="headphoneWarning" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+            <div class="bg-white p-8 rounded-lg shadow-lg text-center">
+                <i class="bi bi-exclamation-triangle text-5xl text-yellow-500 mb-4"></i>
+                <h2 class="text-xl font-bold text-blue-600 mb-4">Please Wear Headphones</h2>
+                <p class="text-gray-600 mb-4">For your privacy, please wear headphones before proceeding.</p>
+                <button onclick="closeWarning()" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">
+                    Understood
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Font size adjustment
+        document.getElementById('fontSize').addEventListener('change', function(e) {
+            const buttons = document.querySelectorAll('.circle-button span');
+            buttons.forEach(button => {
+                button.classList.remove('font-size-small', 'font-size-medium', 'font-size-large');
+                button.classList.add(`font-size-${e.target.value}`);
+            });
+        });
+
+        // Speech synthesis for button hover
+        document.querySelectorAll('.circle-button').forEach(button => {
+            button.addEventListener('mouseover', () => {
+                const text = button.dataset.speech;
+                const utterance = new SpeechSynthesisUtterance(text);
+                window.speechSynthesis.speak(utterance);
+            });
+        });
+
+        // Headphone warning functionality
+        function showHeadphoneWarning() {
+            document.getElementById('headphoneWarning').classList.remove('hidden');
+        }
+
+        function closeWarning() {
+            document.getElementById('headphoneWarning').classList.add('hidden');
+        }
+
+        // Show warning when checking sensitive information
+        document.querySelectorAll('.circle-button').forEach(button => {
+            button.addEventListener('click', () => {
+                if (button.dataset.speech === 'Others') {
+                    showHeadphoneWarning();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

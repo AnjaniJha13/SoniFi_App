@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instant Money Transfer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        .font-size-normal { font-size: 1rem; }
+        .font-size-medium { font-size: 1.25rem; }
+        .font-size-large { font-size: 1.5rem; }
+        
+        .circle-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 2px solid #1e40af;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .circle-avatar:hover {
+            transform: scale(1.1);
+        }
+
+        .warning-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body class="bg-white">
+    <div class="container mx-auto px-4 py-8 max-w-2xl">
+        <!-- Font size selector -->
+        <div class="mb-6 flex justify-end">
+            <select id="fontSizeSelector" class="border-2 border-blue-700 rounded p-2 text-blue-700">
+                <option value="normal">Normal Size</option>
+                <option value="medium">Medium Size</option>
+                <option value="large">Large Size</option>
+            </select>
+        </div>
+
+        <!-- Header -->
+        <h1 class="text-3xl font-bold text-blue-700 text-center mb-8">Instant Money Transfer</h1>
+
+        <!-- Transfer Options -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <button class="transfer-btn p-4 border-2 border-blue-700 rounded-lg text-blue-700 hover:bg-blue-50" data-name="Bank Transfer">
+                <i class="bi bi-bank text-2xl mb-2"></i>
+                <div>Bank Transfer</div>
+            </button>
+            <button class="transfer-btn p-4 border-2 border-blue-700 rounded-lg text-blue-700 hover:bg-blue-50" data-name="Pay Contact">
+                <i class="bi bi-person-plus text-2xl mb-2"></i>
+                <div>Pay Contact</div>
+            </button>
+            <button class="transfer-btn p-4 border-2 border-blue-700 rounded-lg text-blue-700 hover:bg-blue-50" data-name="Pay Phone Number">
+                <i class="bi bi-phone text-2xl mb-2"></i>
+                <div>Pay Phone Number</div>
+            </button>
+            <button class="transfer-btn p-4 border-2 border-blue-700 rounded-lg text-blue-700 hover:bg-blue-50" data-name="Self Transfer">
+                <i class="bi bi-arrow-left-right text-2xl mb-2"></i>
+                <div>Self Transfer</div>
+            </button>
+        </div>
+
+        <!-- People -->
+        <h2 class="text-2xl font-bold text-blue-700 mb-4">People</h2>
+        <div class="grid grid-cols-3 md:grid-cols-6 gap-4 mb-8">
+            <div class="circle-avatar" data-name="Sapna">Sapna</div>
+            <div class="circle-avatar" data-name="Vijay">Vijay</div>
+            <div class="circle-avatar" data-name="Monu">Monu</div>
+            <div class="circle-avatar" data-name="Anil">Anil</div>
+            <div class="circle-avatar" data-name="Jiya">Jiya</div>
+            <div class="circle-avatar" data-name="Tanmay">Tanmay</div>
+        </div>
+
+        <!-- Manage Money -->
+        <h2 class="text-2xl font-bold text-blue-700 mb-4">Manage your money</h2>
+        <div class="space-y-4">
+            <button class="sensitive-action w-full p-4 border-2 border-blue-700 rounded-lg text-blue-700 hover:bg-blue-50" data-name="See transaction history">
+                See transaction history
+            </button>
+            <button class="sensitive-action w-full p-4 border-2 border-blue-700 rounded-lg text-blue-700 hover:bg-blue-50" data-name="Check bank balance">
+                Check bank balance
+            </button>
+        </div>
+    </div>
+
+    <!-- Warning Modal -->
+    <div id="warningModal" class="warning-modal bg-white p-6 rounded-lg shadow-xl border-2 border-red-500">
+        <div class="flex items-center text-red-500 mb-4">
+            <i class="bi bi-exclamation-triangle-fill text-3xl mr-2"></i>
+            <span class="text-xl font-bold">Warning!</span>
+        </div>
+        <p class="text-gray-700 mb-4">Please wear headphones for privacy</p>
+        <button onclick="closeWarning()" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+            Understood
+        </button>
+    </div>
+
+    <script>
+        // Font size handling
+        const fontSizeSelector = document.getElementById('fontSizeSelector');
+        fontSizeSelector.addEventListener('change', (e) => {
+            document.body.className = `bg-white font-size-${e.target.value}`;
+        });
+
+        // Text-to-speech for buttons
+        const speakText = (text) => {
+            const utterance = new SpeechSynthesisUtterance(text);
+            speechSynthesis.speak(utterance);
+        };
+
+        // Add hover listeners for all interactive elements
+        document.querySelectorAll('.transfer-btn, .circle-avatar, .sensitive-action').forEach(element => {
+            element.addEventListener('mouseover', () => {
+                speakText(element.dataset.name);
+            });
+        });
+
+        // Warning modal handling
+        const warningModal = document.getElementById('warningModal');
+        
+        document.querySelectorAll('.sensitive-action').forEach(button => {
+            button.addEventListener('click', () => {
+                warningModal.style.display = 'block';
+            });
+        });
+
+        function closeWarning() {
+            warningModal.style.display = 'none';
+        }
+    </script>
+</body>
+</html>
